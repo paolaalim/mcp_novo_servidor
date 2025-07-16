@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ferramentas MCP</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 50px auto; }
+    label, input, button { display: block; margin-top: 10px; width: 100%; }
+    pre { background: #eee; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Servidor MCP - Interface Web</h1>
+
+  <h2>Contar Palavras</h2>
+  <input id="texto" placeholder="Digite uma frase" />
+  <button onclick="contarPalavras()">Contar</button>
+  <pre id="resposta1"></pre>
+
+  <h2>Somar</h2>
+  <input id="num1" type="number" placeholder="Número 1" />
+  <input id="num2" type="number" placeholder="Número 2" />
+  <button onclick="somar()">Somar</button>
+  <pre id="resposta2"></pre>
+
+  <script>
+    const endpoint = "/mcp/tools/";
+
+    async function contarPalavras() {
+      const texto = document.getElementById("texto").value;
+      const resposta = await fetch(endpoint + "contar_palavras", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto })
+      });
+      const json = await resposta.json();
+      document.getElementById("resposta1").textContent = JSON.stringify(json, null, 2);
+    }
+
+    async function somar() {
+      const a = parseInt(document.getElementById("num1").value);
+      const b = parseInt(document.getElementById("num2").value);
+      const resposta = await fetch(endpoint + "somar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ a, b })
+      });
+      const json = await resposta.json();
+      document.getElementById("resposta2").textContent = JSON.stringify(json, null, 2);
+    }
+  </script>
+</body>
+</html>
